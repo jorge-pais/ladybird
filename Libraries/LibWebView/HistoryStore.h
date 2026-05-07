@@ -7,6 +7,7 @@
 #pragma once
 
 #include <AK/HashMap.h>
+#include <AK/JsonValue.h>
 #include <AK/NonnullOwnPtr.h>
 #include <AK/Optional.h>
 #include <AK/String.h>
@@ -43,9 +44,11 @@ public:
 
     Optional<HistoryEntry> entry_for_url(URL::URL const&);
     Vector<HistoryEntry> autocomplete_entries(StringView query, size_t limit = 8);
+    Vector<HistoryEntry> list_all_entries() const;
 
     void clear();
     void remove_entries_accessed_since(UnixDateTime since);
+    void remove_entry_by_url(String const& url);
 
 private:
     struct Statements {
@@ -56,6 +59,8 @@ private:
         Database::StatementID search_entries { 0 };
         Database::StatementID clear_entries { 0 };
         Database::StatementID delete_entries_accessed_since { 0 };
+        Database::StatementID delete_entry_by_url { 0 };
+        Database::StatementID list_all_entries { 0 };
     };
 
     class TransientStorage {
@@ -66,9 +71,11 @@ private:
 
         Optional<HistoryEntry> entry_for_url(String const& url);
         Vector<HistoryEntry> autocomplete_entries(StringView title_query, StringView url_query, size_t limit);
+        Vector<HistoryEntry> list_all_entries() const;
 
         void clear();
         void remove_entries_accessed_since(UnixDateTime since);
+        void remove_entry_by_url(String const& url);
 
     private:
         HashMap<String, HistoryEntry> m_entries;
@@ -81,9 +88,11 @@ private:
 
         Optional<HistoryEntry> entry_for_url(String const& url);
         Vector<HistoryEntry> autocomplete_entries(StringView title_query, StringView url_query, size_t limit);
+        Vector<HistoryEntry> list_all_entries() const;
 
         void clear();
         void remove_entries_accessed_since(UnixDateTime since);
+        void remove_entry_by_url(String const& url);
 
         Database::Database& database;
         Statements statements;
