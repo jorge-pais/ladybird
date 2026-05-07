@@ -30,6 +30,7 @@ set(SOURCES
     WebContentClient.cpp
     WebUI.cpp
     WebUI/BookmarksUI.cpp
+    WebUI/HistoryUI.cpp
     WebUI/ProcessesUI.cpp
     WebUI/SettingsUI.cpp
     WebUI/VersionUI.cpp
